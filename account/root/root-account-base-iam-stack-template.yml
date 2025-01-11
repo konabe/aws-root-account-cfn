@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Root Account Base IAM Stack
+Resources:
+  AccountAccessPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: root-account-base-account-access-policy
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action:
+              - sts:AssumeRole
+            Resource:
+              - arn:aws:iam::*:role/OrganizationAccountAccessRole
+  OwnerGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: owner
+      ManagedPolicyArns:
+        - !Ref AccountAccessPolicy

@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Accounts Stack
+Parameters:
+  SystemName:
+    Type: String
+    Description: The name of the system
+  AccountOwnerEmailDev:
+    Type: String
+    Description: The email address of the account owner
+  AccountOwnerEmailStg:
+    Type: String
+    Description: The email address of the account owner
+  AccountOwnerEmailProd:
+    Type: String
+    Description: The email address of the account owner
+  RootId:
+    Description: The Root ID of the AWS Organization
+    Type: String
+
+Resources:
+  SystemOU:
+    Type: AWS::Organizations::OrganizationalUnit
+    Properties:
+      Name: !Sub ${SystemName}-ou
+      ParentId: !Ref RootId
+  SystemAccountDev:
+    Type: AWS::Organizations::Account
+    Properties:
+      AccountName: !Sub ${SystemName}-dev
+      Email: !Ref AccountOwnerEmailDev
+      RoleName: OrganizationAccountAccessRole
+      ParentIds:
+        - !Ref SystemOU
+  SysteAccountStg:
+    Type: AWS::Organizations::Account
+    Properties:
+      AccountName: !Sub ${SystemName}-stg
+      Email: !Ref AccountOwnerEmailStg
+      RoleName: OrganizationAccountAccessRole
+      ParentIds:
+        - !Ref SystemOU
+  SysteAccountProd:
+    Type: AWS::Organizations::Account
+    Properties:
+      AccountName: !Sub ${SystemName}-prod
+      Email: !Ref AccountOwnerEmailProd
+      RoleName: OrganizationAccountAccessRole
+      ParentIds:
+        - !Ref SystemOU
